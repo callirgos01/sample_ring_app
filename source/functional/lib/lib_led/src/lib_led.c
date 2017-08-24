@@ -77,7 +77,7 @@ void Lib_LED_StartPattern( Lib_LED_Self *self, UINT32 miliSecondsOnTime, UINT32 
     }
 }
 
-void Lib_LED_StoptPattern( Lib_LED_Self *self )
+void Lib_LED_StopPattern( Lib_LED_Self *self )
 {
     if( self != NULL )
     {

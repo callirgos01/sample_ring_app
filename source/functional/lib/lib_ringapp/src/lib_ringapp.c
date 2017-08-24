@@ -16,16 +16,12 @@ STATIC void Lib_RingApp_ButtonPressed( Lib_RingApp_Self *self )
     {
         //ask battery if we have enough battery
         //if we have enough battery
+        if( self->lowBattery != TRUE )
         {
             //tell the white led process to start blinking
             Lib_LED_TurnLEDOn( self->whiteLED );
             //tell the ethernet process to start sending stuff
-            //
             Lib_Ethernet_StartSendingProcess( self->ethernet );
-        }
-        //else
-        {
-                //we should already be blinking the red light
         }
     }
 }
@@ -42,9 +38,34 @@ STATIC void Lib_RingApp_ButtonReleased( Lib_RingApp_Self *self )
         Lib_Ethernet_StopSendingProcess( self->ethernet );
     }
 }
+STATIC void Lib_RingApp_ChargerConnected( Lib_RingApp_Self *self ) 
+{
+    //this wasnt part of the specifications but if the charger is connected we will resume normal operations.
+    self->lowBattery = FALSE;
+    //we might want to check the current state of the button press, and start transmitting if the charger was connected by the button was being pressed.
+    //otherwise the next time the button is pressed it will check if the low batter boolean is true, an then turn on the transmissions as needed.
+}
+STATIC void Lib_RingApp_LowBattery( Lib_RingApp_Self *self ) 
+{
+    //this is called when the batter is below the low battery threshold
+    //  a.) While the battery voltage is <3.5V, the system shall be put in a non-functional state, meaning the white LED shall not illuminate and the Network Application shall not be executed, even if the button is pushed.
+   //   b.) While the battery voltage is <3.5V, the red LED shall blink at a rate of 2Hz with a 25% duty cycle.
+   //   c.) If the battery voltage returns to an operable level (>= 3.5V), the red LED shall stop blinking and operation shall resume as normal.
+    //2Hz = twise a second. So every 500ms, out of those 500ms, 25% = on time, and 75% is offtime. 125ms on time and 375ms offtime.
+    UINT32 onTime = 125;
+    UINT32 offTime = 375;
+
+    self->lowBattery = TRUE;
+    //turn off White LED if Its on
+    //stop communication if its running
+    Lib_LED_TurnLEDOff( self->whiteLED );
+    Lib_Ethernet_StopSendingProcess( self->ethernet );
+    
+    Lib_LED_StartPattern( self->redLED, onTime, offTime );
+}
 /*Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED,
     Lib_Battery_Self *battery, Lib_Charger_Self *charger )*/
-void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED, void *battery, void *charger )
+void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED, Lib_Battery_Self *battery, void *charger )
 {
     if( self != NULL )
     {
@@ -54,24 +75,17 @@ void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Li
         self->whiteLED = whiteLED;
         self->battery = battery;
         self->charger = charger;
-
+        self->lowBattery = FALSE;
         //setup the button hook ups that pertain to our operations
         Lib_Button_SetButtonPressedCallback( self->button, self, (Lib_Button_ButtonPressEvent) Lib_RingApp_ButtonPressed );
         Lib_Button_SetButtonReleasedCallback( self->button, self, (Lib_Button_ButtonReleasedEvent) Lib_RingApp_ButtonReleased );
+        //setup the battery handler
+        Lib_Battery_SetLowBatteryCallback( self->battery, (Lib_Battery_LowBatteryCallback) Lib_RingApp_LowBattery, self );
+        Lib_Battery_SetChargerConnectedCallback( self->battery, (Lib_Battery_ChargerConnectedCallback) Lib_RingApp_ChargerConnected, self );
     }
 }
 
 void Lib_RingApp_Start( Lib_RingApp_Self *self )
 {
-    //this should kick off all functionality
-    //place holder code to confirm that we are all hooked up
-    /*printf("self 0x%08X\r\n",self);
-    printf("button 0x%08X\r\n",self->button);
-    printf("ethernet 0x%08X\r\n",self->ethernet);
-    printf("redLED 0x%08X\r\n",self->redLED);
-    printf("whiteLED 0x%08X\r\n",self->whiteLED);
-    printf("battery 0x%08X\r\n",self->battery);
-    printf("charger 0x%08X\r\n",self->charger);*/
-    printf("happiness\r\n");
-        
+    Lib_Battery_StartPeriodicBatteryChecks( self->battery );        
 }
