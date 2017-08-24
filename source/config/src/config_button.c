@@ -11,7 +11,7 @@
 
 STATIC BOOLEAN s_configButtonLoaded = FALSE;
 
-STATIC Lib_Button_Self buttonSelf;
+STATIC Lib_Button_Self s_buttonSelf;
 STATIC HAL_GPIO_Self s_gpioSelf;
 
 //setup a gpio pin where we get the input from the button
@@ -23,7 +23,7 @@ STATIC void Config_Button_Init( )
     //so we can get the button interrupt
     HAL_GPIO_ConfigureSelfAsSimpleIO( &s_gpioSelf, HAL_GPIO_IOState_DigitalInputNoInternalPull );
     
-    Lib_Button_CreateSelf( &buttonSelf, &s_gpioSelf );
+    Lib_Button_CreateSelf( &s_buttonSelf, &s_gpioSelf );
 
 }
 Lib_Button_Self *Config_Button_GetButtonSelf( )
@@ -33,6 +33,6 @@ Lib_Button_Self *Config_Button_GetButtonSelf( )
         s_configButtonLoaded = TRUE;
         Config_Button_Init();
     }
-    return &buttonSelf;
+    return &s_buttonSelf;
 
 }

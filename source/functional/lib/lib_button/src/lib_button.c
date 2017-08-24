@@ -9,6 +9,7 @@ And how to propate that event
 
 STATIC void Lib_Button_ProcessInterrupt ( Lib_Button_Self *self )
 {   
+    /*add some debouncing if needed*/
     if( self != NULL )
     {
         //I'm going to assume that the line being high means the button is being pressed.

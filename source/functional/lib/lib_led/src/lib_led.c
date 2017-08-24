@@ -1,4 +1,5 @@
 
+#include <stdio.h>
 #include "typedefs.h"
 #include "lib_led_p.h"
 #include "../../functional/hal/hal_gpio.h"
@@ -23,6 +24,7 @@ void Lib_LED_TurnLEDOn( Lib_LED_Self *self )
     if ( self != NULL )
     {
         self->ledState = TRUE;//we can alternitevly get the state through the readgpio pin function
+        printf("LED_ON\r\n");
         HAL_GPIO_SetLine( self->gpioLED, self->activeHigh );
     }
 
@@ -34,6 +36,7 @@ void Lib_LED_TurnLEDOff( Lib_LED_Self *self )
     if ( self != NULL )
     {
         self->ledState = FALSE;//we can alternitevly get the state through the readgpio pin function
+        printf("LED_OFF\r\n");
         HAL_GPIO_SetLine( self->gpioLED, !self->activeHigh );
     }
 }
@@ -80,7 +83,7 @@ void Lib_LED_StoptPattern( Lib_LED_Self *self )
     {
         /*cancels the alarms (if any) from firing*/    
         //ALARM_CANCEL 
-        //alarm_set( Lib_LED_StartPatternProcess );    
+        //alarm_cancel( Lib_LED_StartPatternProcess );    
         /*and turns off the LED if its on */
         Lib_LED_TurnLEDOff( self );
     }

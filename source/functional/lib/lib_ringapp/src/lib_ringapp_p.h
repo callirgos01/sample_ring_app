@@ -7,11 +7,12 @@
 #include "../lib_ringapp.h"
 #include "../../lib_button/lib_button.h"
 #include "../../lib_led/lib_led.h"
+#include "../../lib_ethernet/lib_ethernet.h"
 
 struct Lib_RingApp_Self
 {
     Lib_Button_Self *button;
-    void * ethernet; //Lib_Ethernet_Self *ethernet; 
+    Lib_Ethernet_Self * ethernet; //Lib_Ethernet_Self *ethernet; 
     Lib_LED_Self *redLED;
     Lib_LED_Self *whiteLED; //Lib_LED_Self *whiteLED;
     void *battery; //Lib_Battery_Self *battery;
@@ -20,6 +21,6 @@ struct Lib_RingApp_Self
 
 //void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED,
 //                            Lib_Battery_Self *battery, Lib_Charger_Self *charger );
-void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, void *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED, void *battery, void *charger );
+void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED, void *battery, void *charger );
 
 #endif //LIB_RINGAPP_P_H
