@@ -55,7 +55,7 @@ for source_file in source_files:
     os.system("gcc -I source/platform/testplatform/ -c {0} -o {1}".format(source_file, output_file))
 
 #linker command. Join all the output files with spaces in between them, and link them into out program file
-print output_files
+#print output_files
 print "gcc -I source/platform/testplatform/ -o build/program {0}".format(" ".join(output_files))
 os.system("gcc -I source/platform/testplatform/ -o build/program {0}".format(" ".join(output_files)))
 
