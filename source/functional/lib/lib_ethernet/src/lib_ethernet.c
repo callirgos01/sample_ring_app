@@ -67,5 +67,5 @@ void Lib_Ethernet_StopSendingProcess( Lib_Ethernet_Self *self )
     //close the UDP port
     HAL_Ethernet_CloseUDPPort( self->halEthernet );
     //reset counter
-    self->counter = 0;
+    self->count = 0;
 }
