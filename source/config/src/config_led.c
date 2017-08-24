@@ -9,8 +9,8 @@
 
 STATIC BOOLEAN s_ledLoaded = FALSE;
 //setup the gpio pins for this hypothetical platform
-const HAL_GPIO_Line CONFIG_LED_LINE_WHITE = { HAL_GPIO_Port_C, HAL_GPIO_Pin_5 };
-const HAL_GPIO_Line CONFIG_LED_LINE_RED = { HAL_GPIO_Port_C, HAL_GPIO_Pin_4 };
+HAL_GPIO_Line CONFIG_LED_LINE_WHITE = { HAL_GPIO_Port_C, HAL_GPIO_Pin_5 };
+HAL_GPIO_Line CONFIG_LED_LINE_RED = { HAL_GPIO_Port_C, HAL_GPIO_Pin_4 };
 
 STATIC HAL_GPIO_Self whiteLEDGpio;
 STATIC Lib_LED_Self whiteLED;

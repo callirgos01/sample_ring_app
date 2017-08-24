@@ -10,6 +10,6 @@ struct Lib_Battery_Self
     
 };
 
-void Lib_Battery_CreateSelf( Lib_Battery_Self *self )
+void Lib_Battery_CreateSelf( Lib_Battery_Self *self );
 
 #endif // __LIB_BATTERY_P_H__

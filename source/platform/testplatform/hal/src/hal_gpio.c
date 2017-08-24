@@ -1,6 +1,6 @@
 #include "hal_gpio_p.h"
 
-void HAL_GPIO_CreateSelf( struct HAL_GPIO_Self *self, const HAL_GPIO_Line *line )
+void HAL_GPIO_CreateSelf( struct HAL_GPIO_Self *self, HAL_GPIO_Line *line )
 {
     self->line = line;
     
