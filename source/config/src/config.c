@@ -7,7 +7,7 @@ it uses lazy initializations to get all the information needed to build the proj
 #include "../../functional/lib/lib_ringapp/src/lib_ringapp_p.h"
 
 #include "config_button_p.h"
-//#include "config_ethernet_p.h"
+#include "config_ethernet_p.h"
 #include "config_led_p.h"
 //#include "config_battery_p.h"
 //#include "config_charger_p.h"
@@ -39,7 +39,7 @@ STATIC Lib_RingApp_Self *Config_GetRingAppSelf( void )
         */
         Lib_RingApp_CreateSelf( &s_ringAppSelf,
                                 Config_Button_GetButtonSelf(),
-                                NULL, //Config_Ethernet_GetEthernetSelf(),
+                                Config_Ethernet_GetEthernetSelf(),
                                 Config_LED_GetRedLEDSelf(),
                                 Config_LED_GetWhiteLEDSelf(),
                                 NULL, //Config_Battery_GetBatterySelf(),
