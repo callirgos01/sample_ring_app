@@ -2,13 +2,44 @@
 #include "typedefs.h"
 #include "lib_battery_p.h"
 #include "../../functional/hal/hal_adc.h"
+#include "../../lib_charger/lib_charger.h"
 
-void Lib_Battery_CreateSelf( Lib_Battery_Self *self, HAL_ADC_Self *halADCSelf, UINT32 lowBatteryThreshold )
+STATIC void Lib_Battery_ChargerConnected( Lib_Battery_Self *self )
+{
+    if ( self != NULL )
+    {
+        //stop reading the battery levels
+        //trigger the event to the upper layers.
+        //alarm_cancel( Lib_Battery_StartPeriodicBatteryChecks, self );
+        if( self->chargerConnectedCallback != NULL )
+        {
+            self->chargerConnectedCallback( self->delegate );
+        }
+    }
+}
+
+STATIC void Lib_Battery_ChargerDiscConnected( Lib_Battery_Self *self )
+{
+    if ( self != NULL )
+    {
+        //continue the reading of the battery levels
+        //trigger events if needed
+        Lib_Battery_StartPeriodicBatteryChecks( self );
+    }
+}
+
+void Lib_Battery_CreateSelf( Lib_Battery_Self *self, HAL_ADC_Self *halADCSelf, Lib_Charger_Self *charger, UINT32 lowBatteryThreshold )
 {
     if ( self != NULL )
     {
         self->lowBatteryThreshold = lowBatteryThreshold;
         self->halADCSelf = halADCSelf;
+        self->charger = charger;
+
+        //setup the interrupts from the charger
+        Lib_Charger_SetChargerConnectedCallback( self->charger, self, (Lib_Charger_ChargerConnectedEvent) Lib_Battery_ChargerConnected );
+        Lib_Charger_SetChargerDisconnectedCallback( self->charger, self, (Lib_Charger_ChargerDisconnectedEvent) Lib_Battery_ChargerDiscConnected );
+
     }
 }
 

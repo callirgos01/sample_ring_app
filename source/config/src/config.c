@@ -10,7 +10,6 @@ it uses lazy initializations to get all the information needed to build the proj
 #include "config_ethernet_p.h"
 #include "config_led_p.h"
 #include "config_battery_p.h"
-//#include "config_charger_p.h"
 
 
 STATIC BOOLEAN s_configAppLoaded = FALSE;
@@ -42,8 +41,7 @@ STATIC Lib_RingApp_Self *Config_GetRingAppSelf( void )
                                 Config_Ethernet_GetEthernetSelf(),
                                 Config_LED_GetRedLEDSelf(),
                                 Config_LED_GetWhiteLEDSelf(),
-                                Config_Battery_GetBatterySelf(),
-                                NULL //Config_Charger_GetChargerSelf()
+                                Config_Battery_GetBatterySelf()
                                 );
     }
     //this returns a pointer to the statically allocated self.

@@ -7,6 +7,8 @@
 #include "../../functional/lib/lib_battery/src/lib_battery_p.h"
 #include "../../functional/hal/hal_adc.h"
 #include "hal/src/hal_adc_p.h"
+#include "config_charger_p.h"
+
 #define LOW_BATTERY_THRESHOLD 3500
 
 STATIC BOOLEAN s_configBatteryLoaded = FALSE;
@@ -18,7 +20,7 @@ STATIC void Config_Battery_Init( void )
 {
     HAL_ADC_CreateSelf( &s_halADCSelf );
     
-    Lib_Battery_CreateSelf( &s_batterySelf, &s_halADCSelf, LOW_BATTERY_THRESHOLD );
+    Lib_Battery_CreateSelf( &s_batterySelf, &s_halADCSelf, Config_Charger_GetChargerSelf(), LOW_BATTERY_THRESHOLD );
 }
 Lib_Battery_Self *Config_Battery_GetBatterySelf( void )
 {

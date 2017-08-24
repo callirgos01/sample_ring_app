@@ -65,7 +65,7 @@ STATIC void Lib_RingApp_LowBattery( Lib_RingApp_Self *self )
 }
 /*Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED,
     Lib_Battery_Self *battery, Lib_Charger_Self *charger )*/
-void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED, Lib_Battery_Self *battery, void *charger )
+void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED, Lib_Battery_Self *battery )
 {
     if( self != NULL )
     {
@@ -74,7 +74,6 @@ void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Li
         self->redLED = redLED;
         self->whiteLED = whiteLED;
         self->battery = battery;
-        self->charger = charger;
         self->lowBattery = FALSE;
         //setup the button hook ups that pertain to our operations
         Lib_Button_SetButtonPressedCallback( self->button, self, (Lib_Button_ButtonPressEvent) Lib_RingApp_ButtonPressed );
