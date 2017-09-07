@@ -86,5 +86,6 @@ void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Li
 
 void Lib_RingApp_Start( Lib_RingApp_Self *self )
 {
+    printf("WORKS!\r\n");
     Lib_Battery_StartPeriodicBatteryChecks( self->battery );        
 }
