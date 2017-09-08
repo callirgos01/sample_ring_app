@@ -18,15 +18,11 @@ SOURCE_DIRS = [
 ]
 
 INCLUDE_DIRS = [
-    #'../../output',
-    #'../functional',
-    #'../functional/lib',
-    #'../functional/mbd',
-    #'../functional/soup',
+    'source/config',
+    'source/functional',
     'source/platform/testplatform/soup',
     'source/platform/testplatform/soup/boost',
     'source/platform/testplatform',
-    #'.',
 ]
 def dir_entries(dir_name, *args):
     file_list = []
