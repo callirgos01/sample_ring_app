@@ -7,6 +7,7 @@
 #include "lib_ringapp_p.h"
 #include "../../lib_button/lib_button.h"
 #include "../../lib_led/lib_led.h"
+#include "os/os_eventqueue.h"
 /*
     call back triggers when the button is pressed
 */
@@ -86,5 +87,7 @@ void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Li
 
 void Lib_RingApp_Start( Lib_RingApp_Self *self )
 {
+    printf("WORKS!\r\n");
+
     Lib_Battery_StartPeriodicBatteryChecks( self->battery );        
 }

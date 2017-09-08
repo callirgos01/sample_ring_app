@@ -4,6 +4,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-void Config_AppStartApp( void );
+void Config_Define( void );
 
 #endif //CONFIG_H
