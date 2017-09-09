@@ -48,7 +48,6 @@ void HAL_GPIO_SetLineInterruptTrigger( struct HAL_GPIO_Self *self, InterruptEven
     //this should setup the gpio pins to trigger an interrupt and call the callback 'interruptEvent' when the gpio triggers on the specified edge
     //lets simulate some events from this stubbed driver
     //setup an alarm to trigger a a constant interval.
-    printf("times %u -> %u\r\n", s_timesIndex, s_test_times[s_timesIndex]);
     UINT32 beatsToWait = OS_ALARM_SECONDS_TO_BEATS( s_test_times[s_timesIndex++] );
 
     OS_Alarm_Repeat( (Event) interruptEvent, interruptData, beatsToWait, beatsToWait, OS_ALARM_REPEAT_FOREVER );
@@ -58,4 +57,6 @@ void HAL_GPIO_SetLineInterruptTrigger( struct HAL_GPIO_Self *self, InterruptEven
 void HAL_GPIO_SetLine( struct HAL_GPIO_Self *self, BOOLEAN setValue )
 {
     /* use the platform gpio interface to set the value of an output GPIO to 'setValue'*/
+    DPrintf("GPIO{ port = %u, pin = %u } = %s\r\n", self->line->port, self->line->pin, (setValue) ? "On": "Off");
+    
 }

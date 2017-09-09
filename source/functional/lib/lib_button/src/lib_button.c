@@ -18,7 +18,6 @@ STATIC void Lib_Button_ProcessInterrupt ( Lib_Button_Self *self )
         // this even should trigger on every edge transition
         //so I gotta figure out which transition it is and dispath the appropriate callback
         BOOLEAN buttonState = HAL_GPIO_ReadLine( self->buttonInterrupt );
-        printf("button state %u\r\n", buttonState);
         if( buttonState )
         {
             if( self->buttonPressCallBack != NULL )
@@ -38,7 +37,6 @@ STATIC void Lib_Button_ProcessInterrupt ( Lib_Button_Self *self )
 }
 STATIC /*volatile*/ void Lib_Button_OnButtonTrigger( /*volatile*/ Lib_Button_Self *self )
 {
-    printf("button triggered\r\n");
     /* THIS IS IN AN INTERRUPT CONTEXT */
     /* ON A REAL SYSTEM I WOULD USE WHATEVER OS QUEUE WE ARE CURRENTLY USING TO QUEUE UP A SYNCHRONOUS EVENT */
     /* BECAUSE OF THE LACK OF SUCH SYSTEM IN THIS SAMPLE PLATFORM, I'M GOING TO BE MAKING DIRECT CALLS TO THE REQUIRED STATUS AND CALLBACKS */

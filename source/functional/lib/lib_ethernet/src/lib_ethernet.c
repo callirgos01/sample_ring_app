@@ -15,11 +15,12 @@ STATIC void Lib_Ethernet_SendPacket( Lib_Ethernet_Self *self );
 */
 void Lib_Ethernet_CreateSelf( struct Lib_Ethernet_Self *self, HAL_Ethernet_Self *halEthernet )
 {
-    DPrintf("Lib_Ethernet_CreateSelf\r\n");
     if ( self != NULL )
     {        
         self->count = 0;
         self->halEthernet = halEthernet;
+        self->time = 0;
+        self->running = FALSE;
     }
 }
 /*
@@ -27,7 +28,6 @@ void Lib_Ethernet_CreateSelf( struct Lib_Ethernet_Self *self, HAL_Ethernet_Self 
 */
 STATIC void Lib_Ethernet_SendTimeOut( Lib_Ethernet_Self *self)
 {
-    DPrintf("Lib_Ethernet_SendTimeOut\r\n");
   
     //this doesnt update count
     //set an alarm that will call Lib_Ethernet_StartSendingProcess in the time difference between the last time we checked time and now.
@@ -40,39 +40,42 @@ STATIC void Lib_Ethernet_SendTimeOut( Lib_Ethernet_Self *self)
 
 STATIC void Lib_Ethernet_SendProcessCompletedCallback( Lib_Ethernet_Self *self )
 {
-    DPrintf("Lib_Ethernet_SendProcessCompletedCallback\r\n");
-    //cancel time out since we receved a packet
-    OS_Alarm_Cancel( (Event) Lib_Ethernet_SendTimeOut, self );
-
-    UINT8 incPacket[PACKET_SIZE];
-    //cancel timeout alarm
-    //if this function is called the process was completed successfully
-    //and there is a reply from the server
-    if( Hal_EthernetGetIncomingPacket( self->halEthernet, incPacket, PACKET_SIZE ) )
+    if( self != NULL )
     {
-        UINT32 i;
+        //cancel time out since we receved a packet
+        OS_Alarm_Cancel( (Event) Lib_Ethernet_SendTimeOut, self );
 
-        UINT16 incValue = (UINT16)( (UINT16)(incPacket[0]) | ((UINT16)(incPacket[1]) << 8) );
-        if( self->count == incValue )
+        UINT8 incPacket[PACKET_SIZE];
+        //cancel timeout alarm
+        //if this function is called the process was completed successfully
+        //and there is a reply from the server
+        if( Hal_EthernetGetIncomingPacket( self->halEthernet, incPacket, PACKET_SIZE ) )
         {
-            //update count
-            self->count++;
-        }       
-    }
-    //we would resend the same value if the incoming packet failed, or didnt match
-    //set an alarm that will call Lib_Ethernet_StartSendingProcess in the time difference between the last time we 
-    //checked time and now.
-    //alarm_set( Lib_Ethernet_StartSendingProcess, self, 
-    //OS_ALARM_MILISECONDS_TO_BEATS(current_time_in_miliseconds) - self->time );
-    //we are supposed to send another packet every 1 second
-    //some time thqt is less than 500 ms but more than 0 has elapsed
-    //set an alarm that fires at 1 second - time elapsed. 
-    OS_Alarm_Set( (Event) Lib_Ethernet_SendPacket, self, OS_ALARM_SECONDS_TO_BEATS( 1 ) - ( HAL_Time_GetBeatsSinceStartup() - self->time ) );
+            UINT32 i;
 
+            UINT16 incValue = (UINT16)( (UINT16)(incPacket[0]) | ((UINT16)(incPacket[1]) << 8) );
+            if( self->count == incValue )
+            {
+                //update count
+                self->count++;
+            }       
+        }
+        //we would resend the same value if the incoming packet failed, or didnt match
+        //set an alarm that will call Lib_Ethernet_StartSendingProcess in the time difference between the last time we 
+        //checked time and now.
+        //alarm_set( Lib_Ethernet_StartSendingProcess, self, 
+        //OS_ALARM_MILISECONDS_TO_BEATS(current_time_in_miliseconds) - self->time );
+        //we are supposed to send another packet every 1 second
+        //some time thqt is less than 500 ms but more than 0 has elapsed
+        //set an alarm that fires at 1 second - time elapsed. 
+        if( self->running == TRUE )
+        {
+            OS_Alarm_Set( (Event) Lib_Ethernet_SendPacket, self, OS_ALARM_SECONDS_TO_BEATS( 1 ) - ( HAL_Time_GetBeatsSinceStartup() - self->time ) );
+        }
+    }
 }
 STATIC void Lib_Ethernet_SendPacket( Lib_Ethernet_Self *self )
 {
-    DPrintf("Lib_Ethernet_SendPacket\r\n");
     if( self != NULL )
     {
         UINT8 packet[PACKET_SIZE];
@@ -107,9 +110,9 @@ void Lib_Ethernet_StartSendingProcess( Lib_Ethernet_Self *self )
 {
     if( self != NULL )
     {
+        self->running = TRUE;
         //reset to starting state
         Lib_Ethernet_ResetToStartingState( self );
-        DPrintf("Lib_Ethernet_StartSendingProcess\r\n");
 
         HAL_Ethernet_OpenUDPPort( self->halEthernet );// the port and server name was already set during setup
 
@@ -121,7 +124,7 @@ void Lib_Ethernet_StopSendingProcess( Lib_Ethernet_Self *self )
 {
     if( self != NULL )
     {
-        DPrintf("Lib_Ethernet_StopSendingProcess\r\n");
+        self->running = FALSE;
         Lib_Ethernet_ResetToStartingState( self );
     }
 }

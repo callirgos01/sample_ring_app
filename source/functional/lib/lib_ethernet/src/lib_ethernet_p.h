@@ -14,6 +14,7 @@ struct Lib_Ethernet_Self
     UINT16 count;
     HAL_Ethernet_Self *halEthernet;
     UINT32 time;
+    BOOLEAN running;
 };
 
 void Lib_Ethernet_CreateSelf( Lib_Ethernet_Self *self, HAL_Ethernet_Self *halEthernet );

@@ -5,14 +5,16 @@
 #include "os/os_alarm.h"
 #include "../../functional/hal/hal_adc.h"
 #include "../../lib_charger/lib_charger.h"
+STATIC void Lib_Battery_CheckBattery( Lib_Battery_Self *self );
+
 
 STATIC void Lib_Battery_ChargerConnected( Lib_Battery_Self *self )
 {
     if ( self != NULL )
     {
         //stop reading the battery levels
+        OS_Alarm_Cancel( (Event)Lib_Battery_CheckBattery, self );
         //trigger the event to the upper layers.
-        //alarm_cancel( Lib_Battery_StartPeriodicBatteryChecks, self );
         if( self->chargerConnectedCallback != NULL )
         {
             self->chargerConnectedCallback( self->delegate );
@@ -63,15 +65,14 @@ void Lib_Battery_SetChargerConnectedCallback( Lib_Battery_Self *self, Lib_Batter
     }
 }
 
-void Lib_Battery_CheckBattery( Lib_Battery_Self *self )
+STATIC void Lib_Battery_CheckBattery( Lib_Battery_Self *self )
 {
-    printf("read battery \r\n"); 
     if ( self != NULL )
     {
         UINT32 batteryValue = 0;
         if( Hal_ADC_ReadADCValue( self->halADCSelf, &batteryValue) )
         {
-            printf( "battery reading %u\r\n", batteryValue );
+            DPrintf( "Battery Level %u mV\r\n", batteryValue );
             //read value successfully
             //test is against the threshold
             if( batteryValue <= self->lowBatteryThreshold )
@@ -86,6 +87,8 @@ void Lib_Battery_CheckBattery( Lib_Battery_Self *self )
 }
 void Lib_Battery_StartPeriodicBatteryChecks( Lib_Battery_Self *self )
 {
+
+    OS_Alarm_Cancel( (Event)Lib_Battery_CheckBattery, self );
     //setup a timer/alarm that will check battery every minute
     //if battery is below the set threshold
     //this library will notify a client defined call back to propagate behavior
