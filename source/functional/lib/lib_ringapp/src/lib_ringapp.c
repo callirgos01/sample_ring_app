@@ -51,6 +51,8 @@ STATIC void Lib_RingApp_ChargerConnected( Lib_RingApp_Self *self )
     self->lowBattery = FALSE;
     //we might want to check the current state of the button press, and start transmitting if the charger was connected by the button was being pressed.
     //otherwise the next time the button is pressed it will check if the low batter boolean is true, an then turn on the transmissions as needed.
+    //if we were running the low battery pattern, we should stop it now
+    Lib_LED_StopPattern( self->redLED );
 }
 STATIC void Lib_RingApp_LowBattery( Lib_RingApp_Self *self ) 
 {
@@ -71,8 +73,7 @@ STATIC void Lib_RingApp_LowBattery( Lib_RingApp_Self *self )
     
     Lib_LED_StartPattern( self->redLED, onTime, offTime );
 }
-/*Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED,
-    Lib_Battery_Self *battery, Lib_Charger_Self *charger )*/
+
 void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED, Lib_Battery_Self *battery )
 {
     if( self != NULL )
