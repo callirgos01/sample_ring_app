@@ -1,6 +1,9 @@
+
+#include <stdio.h>
 #include "typedefs.h"
 #include "../../functional/hal/hal_gpio.h"
 #include "lib_charger_p.h"
+#include "os/os_alarm.h"
 
 STATIC void Lib_Charger_ProcessInterrupt ( Lib_Charger_Self *self )
 {   
@@ -28,6 +31,7 @@ STATIC void Lib_Charger_ProcessInterrupt ( Lib_Charger_Self *self )
 
 STATIC /*volatile*/ void Lib_Charger_OnChargerConnectedTrigger( /*volatile*/ Lib_Charger_Self *self )
 {
+    printf("--------CHARGER EVENT\r\n");
     /* THIS IS IN AN INTERRUPT CONTEXT */
     /* ON A REAL SYSTEM I WOULD USE WHATEVER OS QUEUE WE ARE CURRENTLY USING TO QUEUE UP A SYNCHRONOUS EVENT */
     /* BECAUSE OF THE LACK OF SUCH SYSTEM IN THIS SAMPLE PLATFORM, I'M GOING TO BE MAKING DIRECT CALLS TO THE REQUIRED STATUS AND CALLBACKS */
@@ -41,6 +45,7 @@ void Lib_Charger_CreateSelf( Lib_Charger_Self *self, HAL_GPIO_Self *chargerConne
     if( self != NULL )
     {
         self->chargerConnectedInterrupt = chargerConnectedInterrupt;
+        DPrintf("registering event for charger\r\n");
         HAL_GPIO_SetLineInterruptTrigger( self->chargerConnectedInterrupt, ( InterruptEvent ) Lib_Charger_OnChargerConnectedTrigger, (void *) self, HAL_GPIO_InterruptTrigger_Edge );
     }    
 }

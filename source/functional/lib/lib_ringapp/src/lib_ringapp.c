@@ -15,6 +15,7 @@
 */
 STATIC void Lib_RingApp_ButtonPressed( Lib_RingApp_Self *self )
 {
+    DPrintf("BUTTON PRESSED\r\n");
     if( self != NULL )
     {
         //ask battery if we have enough battery
@@ -29,10 +30,12 @@ STATIC void Lib_RingApp_ButtonPressed( Lib_RingApp_Self *self )
     }
 }
 /*
-    call back ttriggers when the button is released
+    call back triggers when the button is released
 */
 STATIC void Lib_RingApp_ButtonReleased( Lib_RingApp_Self *self )
-{
+{    
+    DPrintf("BUTTON RELEASED\r\n");
+
     if( self != NULL )
     {
         //stop white led
@@ -43,6 +46,7 @@ STATIC void Lib_RingApp_ButtonReleased( Lib_RingApp_Self *self )
 }
 STATIC void Lib_RingApp_ChargerConnected( Lib_RingApp_Self *self ) 
 {
+    DPrintf("CHARGER CONNECTED\r\n");
     //this wasnt part of the specifications but if the charger is connected we will resume normal operations.
     self->lowBattery = FALSE;
     //we might want to check the current state of the button press, and start transmitting if the charger was connected by the button was being pressed.
@@ -50,7 +54,7 @@ STATIC void Lib_RingApp_ChargerConnected( Lib_RingApp_Self *self )
 }
 STATIC void Lib_RingApp_LowBattery( Lib_RingApp_Self *self ) 
 {
-    printf("low battery\r\n");
+    DPrintf("LOW BATT\r\n");
     //this is called when the batter is below the low battery threshold
     //  a.) While the battery voltage is <3.5V, the system shall be put in a non-functional state, meaning the white LED shall not illuminate and the Network Application shall not be executed, even if the button is pushed.
    //   b.) While the battery voltage is <3.5V, the red LED shall blink at a rate of 2Hz with a 25% duty cycle.
