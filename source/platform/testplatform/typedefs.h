@@ -8,6 +8,7 @@
 
 typedef volatile void ( *InterruptEvent )( void *data );
 
+typedef signed int      SINT32;  // 32 bits
 typedef uint8_t         BOOLEAN; //  8 bits - use TRUE or FALSE for this type
 typedef unsigned char   UINT8;   //  8 bits
 typedef unsigned short  UINT16;  // 16 bits

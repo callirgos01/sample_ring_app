@@ -6,13 +6,23 @@
 void HAL_ADC_CreateSelf( struct HAL_ADC_Self *self )
 {
     /*initialize the ADC*/
+    //simulating a battery that starts at 4V
 
+    if( self != NULL )
+    {
+        self->adcValue = 4000;
+    }
 }
 
 BOOLEAN Hal_ADC_ReadADCValue( struct HAL_ADC_Self *self, UINT32 *adcValue )
 {
-    /* this shold use the driver to read the value from the ADC*/
-    //defaulting to returning 4V
-    *adcValue = 4000;
-    return TRUE;
+    BOOLEAN success = FALSE;
+    if( self != NULL )
+    {
+        self-> adcValue -= 100;
+        //simulating a battery that is discharging 100 mV every time the battery is read
+        *adcValue = self->adcValue;
+        success = TRUE;
+    }
+    return success;
 }

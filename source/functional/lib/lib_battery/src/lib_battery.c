@@ -1,6 +1,8 @@
 
 #include "typedefs.h"
+#include <stdio.h>
 #include "lib_battery_p.h"
+#include "os/os_alarm.h"
 #include "../../functional/hal/hal_adc.h"
 #include "../../lib_charger/lib_charger.h"
 
@@ -62,12 +64,14 @@ void Lib_Battery_SetChargerConnectedCallback( Lib_Battery_Self *self, Lib_Batter
 }
 
 void Lib_Battery_CheckBattery( Lib_Battery_Self *self )
-{   
+{
+    printf("read battery \r\n"); 
     if ( self != NULL )
     {
         UINT32 batteryValue = 0;
         if( Hal_ADC_ReadADCValue( self->halADCSelf, &batteryValue) )
         {
+            printf( "battery reading %u\r\n", batteryValue );
             //read value successfully
             //test is against the threshold
             if( batteryValue <= self->lowBatteryThreshold )
@@ -85,6 +89,5 @@ void Lib_Battery_StartPeriodicBatteryChecks( Lib_Battery_Self *self )
     //setup a timer/alarm that will check battery every minute
     //if battery is below the set threshold
     //this library will notify a client defined call back to propagate behavior
-
-    //alarm_set_repeat( Lib_Battery_CheckBattery, 60000. self);
+    OS_Alarm_Repeat( (Event)Lib_Battery_CheckBattery, self, 0, LIB_BATTERY_READ_INTERVAL, OS_ALARM_REPEAT_FOREVER );
 }
