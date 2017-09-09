@@ -1,5 +1,6 @@
 #include "typedefs.h"
 #include "../os_eventqueue.h"
+#include "os/os_alarm.h"
 
 STATIC BOOLEAN s_OSloaded = FALSE;
 
@@ -35,6 +36,8 @@ STATIC void OS_ProcessOneEvent( void )
     {
         //go idle in some way
         //enable interrupts again
+        // Note: if removed, be sure to modify OS_EQ_QueueHelper
+        OS_Alarm_Process( NULL );
     }
     //process alarms here, once we add an alarm process
 }

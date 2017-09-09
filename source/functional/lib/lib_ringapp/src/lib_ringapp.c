@@ -8,6 +8,8 @@
 #include "../../lib_button/lib_button.h"
 #include "../../lib_led/lib_led.h"
 #include "os/os_eventqueue.h"
+#include "os/os_alarm.h"
+#include "hal/hal_time.h"
 /*
     call back triggers when the button is pressed
 */
@@ -48,6 +50,7 @@ STATIC void Lib_RingApp_ChargerConnected( Lib_RingApp_Self *self )
 }
 STATIC void Lib_RingApp_LowBattery( Lib_RingApp_Self *self ) 
 {
+    printf("low battery\r\n");
     //this is called when the batter is below the low battery threshold
     //  a.) While the battery voltage is <3.5V, the system shall be put in a non-functional state, meaning the white LED shall not illuminate and the Network Application shall not be executed, even if the button is pushed.
    //   b.) While the battery voltage is <3.5V, the red LED shall blink at a rate of 2Hz with a 25% duty cycle.
@@ -87,7 +90,5 @@ void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Li
 
 void Lib_RingApp_Start( Lib_RingApp_Self *self )
 {
-    printf("WORKS!\r\n");
-
     Lib_Battery_StartPeriodicBatteryChecks( self->battery );        
 }

@@ -1,9 +1,10 @@
 #include "typedefs.h"
 #include "os_eventqueue_p.h"
+#include "../os_alarm.h"
 
 STATIC OS_EventQueue_State s_eventQueueState;
 STATIC BOOLEAN s_osEventQueueLoaded = FALSE;
-//STATIC BOOLEAN s_alarmProcessQueued = FALSE;
+STATIC BOOLEAN s_alarmProcessQueued = FALSE;
 
 STATIC void OS_EventQueue_Init( void )
 {
@@ -47,13 +48,11 @@ STATIC Event OS_EventQueue_DequeueHelper( void **dataPtr )
         s_eventQueueState.nextEvent = (UINT8)( ( s_eventQueueState.nextEvent + 1 ) % OS_EventQueue_MAX_EVENTS );
         s_eventQueueState.eventCount--;
     }
-    /*
-    handle alarms here once we add them
     if ( eventRemoved == OS_Alarm_Process )
     {
         s_alarmProcessQueued = FALSE;
     }
-    */
+    
     return ( eventRemoved );
 }
 Event OS_EventQueue_Dequeue( void **dataPtr )
@@ -69,26 +68,24 @@ Event OS_EventQueue_Dequeue( void **dataPtr )
 STATIC BOOLEAN OS_EventQueue_QueueHelper( Event event, void *data )
 {
     BOOLEAN success = TRUE;
-    //@todo add special cases here for alarms
-    //if( s_alarmProcessQueued == FALSE )
-    //{
-    if( s_eventQueueState.eventCount < OS_EventQueue_MAX_EVENTS )
+    if( (event != OS_Alarm_Process) || (s_alarmProcessQueued == FALSE) )
     {
-        UINT16 index = ( s_eventQueueState.nextEvent + s_eventQueueState.eventCount ) % OS_EventQueue_MAX_EVENTS;
-        s_eventQueueState.events[index] = event;
-        s_eventQueueState.data[index] = data;
-        s_eventQueueState.eventCount++;
-        //@todo add alarm handling
-        //if ( event == OS_Alarm_Process )
-        //{
-        //    s_alarmProcessQueued = TRUE;
-        //}
+        if( s_eventQueueState.eventCount < OS_EventQueue_MAX_EVENTS )
+        {
+            UINT16 index = ( s_eventQueueState.nextEvent + s_eventQueueState.eventCount ) % OS_EventQueue_MAX_EVENTS;
+            s_eventQueueState.events[index] = event;
+            s_eventQueueState.data[index] = data;
+            s_eventQueueState.eventCount++;
+            if ( event == OS_Alarm_Process )
+            {
+                s_alarmProcessQueued = TRUE;
+            }
+        }
+        else
+        {
+            success = FALSE;
+        }
     }
-    else
-    {
-        success = FALSE;
-    }
-    //}
     return success;
 
 }
