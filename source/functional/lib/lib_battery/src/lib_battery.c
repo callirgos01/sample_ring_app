@@ -28,6 +28,7 @@ STATIC void Lib_Battery_ChargerDiscConnected( Lib_Battery_Self *self )
     {
         //continue the reading of the battery levels
         //trigger events if needed
+        DPrintf("CHARGER DISCONNECTED\r\n");
         Lib_Battery_StartPeriodicBatteryChecks( self );
     }
 }

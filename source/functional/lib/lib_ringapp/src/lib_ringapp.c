@@ -53,6 +53,7 @@ STATIC void Lib_RingApp_ChargerConnected( Lib_RingApp_Self *self )
     //otherwise the next time the button is pressed it will check if the low batter boolean is true, an then turn on the transmissions as needed.
     //if we were running the low battery pattern, we should stop it now
     Lib_LED_StopPattern( self->redLED );
+    
 }
 STATIC void Lib_RingApp_LowBattery( Lib_RingApp_Self *self ) 
 {
