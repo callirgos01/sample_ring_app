@@ -5,6 +5,10 @@
 #define TYPEDEFS_H
 
 #include <stdint.h>
+//@todo remove this print f, and create a utility file with this functionality.
+#define DPrintf(...) printf("[%u]", OS_ALARM_BEATS_TO_MILISECONDS( HAL_Time_GetBeatsSinceStartup() ) ) ;    \
+                     printf( __VA_ARGS__)
+
 
 typedef volatile void ( *InterruptEvent )( void *data );
 
