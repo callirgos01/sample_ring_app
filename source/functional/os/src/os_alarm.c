@@ -43,9 +43,6 @@ STATIC void OS_Alarm_Require( void )
 
 BOOLEAN OS_Alarm_Repeat( Event event, void *data, UINT32 startDelayBeats, UINT32 repeatBeats, UINT8 fireCount )
 {
-    printf("startDelayBeats %u\r\n", startDelayBeats);
-    printf("repeatBeats %u\r\n", repeatBeats);
-    printf("fireCount %u\r\n", fireCount);
     BOOLEAN alarmAdded = FALSE;
     UINT32 i;
     OS_Alarm_Require();
@@ -74,7 +71,7 @@ BOOLEAN OS_Alarm_Repeat( Event event, void *data, UINT32 startDelayBeats, UINT32
 
 BOOLEAN OS_Alarm_Set( Event event, void *data, UINT32 startDelayBeats )
 {
-    printf("beats to wait %u\r\n", startDelayBeats);
+    //printf("beats to wait %u\r\n", startDelayBeats);
     return OS_Alarm_Repeat( event, data, startDelayBeats, 0, 1 );
 }
 
@@ -139,3 +136,38 @@ void OS_Alarm_Process( void *ignored )
         HAL_Time_SetDefaultAlarm();
     }
 }
+
+
+void OS_Alarm_Cancel( Event eventToRemove, void *dataToRemove )
+{
+    UINT32 i;
+    OS_Alarm_Require();
+
+    // First remove any "just firing" alarms
+    OS_EventQueue_Cancel( eventToRemove, dataToRemove );
+
+    s_alarmState.activeAlarmCount = 0;
+    for ( i = 0; i < OS_ALARM_MAX_ALARMS; i++ )
+    {
+        OS_Alarm_AlarmStruct* alarm = &s_alarmState.alarms[i];
+
+        if ( ( eventToRemove == NULL ) ||
+             ( alarm->event == NULL ) ||
+             ( ( alarm->event == eventToRemove ) &&
+               ( ( alarm->data == dataToRemove ) || ( alarm->data == NULL ) ) ) )
+        {
+            OS_Alarm_InitAlarmStruct( alarm );
+        }
+        else
+        {
+            if ( ( s_alarmState.activeAlarmCount == 0 ) ||
+                 ( OS_Alarm_TimeDiff( alarm->targetBeats, s_alarmState.nextAlarmBeats ) < 0 ) )
+            {
+                // This is the next alarm to fire.
+                s_alarmState.nextAlarmBeats = alarm->targetBeats;
+            }
+            s_alarmState.activeAlarmCount++;
+        }
+    }
+}
+

@@ -15,6 +15,7 @@
 */
 STATIC void Lib_RingApp_ButtonPressed( Lib_RingApp_Self *self )
 {
+    DPrintf("BUTTON PRESSED\r\n");
     if( self != NULL )
     {
         //ask battery if we have enough battery
@@ -29,10 +30,12 @@ STATIC void Lib_RingApp_ButtonPressed( Lib_RingApp_Self *self )
     }
 }
 /*
-    call back ttriggers when the button is released
+    call back triggers when the button is released
 */
 STATIC void Lib_RingApp_ButtonReleased( Lib_RingApp_Self *self )
-{
+{    
+    DPrintf("BUTTON RELEASED\r\n");
+
     if( self != NULL )
     {
         //stop white led
@@ -43,14 +46,18 @@ STATIC void Lib_RingApp_ButtonReleased( Lib_RingApp_Self *self )
 }
 STATIC void Lib_RingApp_ChargerConnected( Lib_RingApp_Self *self ) 
 {
+    DPrintf("CHARGER CONNECTED\r\n");
     //this wasnt part of the specifications but if the charger is connected we will resume normal operations.
     self->lowBattery = FALSE;
     //we might want to check the current state of the button press, and start transmitting if the charger was connected by the button was being pressed.
     //otherwise the next time the button is pressed it will check if the low batter boolean is true, an then turn on the transmissions as needed.
+    //if we were running the low battery pattern, we should stop it now
+    Lib_LED_StopPattern( self->redLED );
+    
 }
 STATIC void Lib_RingApp_LowBattery( Lib_RingApp_Self *self ) 
 {
-    printf("low battery\r\n");
+    DPrintf("LOW BATT\r\n");
     //this is called when the batter is below the low battery threshold
     //  a.) While the battery voltage is <3.5V, the system shall be put in a non-functional state, meaning the white LED shall not illuminate and the Network Application shall not be executed, even if the button is pushed.
    //   b.) While the battery voltage is <3.5V, the red LED shall blink at a rate of 2Hz with a 25% duty cycle.
@@ -67,8 +74,7 @@ STATIC void Lib_RingApp_LowBattery( Lib_RingApp_Self *self )
     
     Lib_LED_StartPattern( self->redLED, onTime, offTime );
 }
-/*Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED,
-    Lib_Battery_Self *battery, Lib_Charger_Self *charger )*/
+
 void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED, Lib_Battery_Self *battery )
 {
     if( self != NULL )

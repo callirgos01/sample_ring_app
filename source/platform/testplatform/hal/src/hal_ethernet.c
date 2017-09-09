@@ -2,7 +2,9 @@
 #include "hal_ethernet_p.h"
 #include <stdio.h>
 #include <string.h>
-
+//this dependency is being added ONLY for the purposes of simulating hardware events
+//on a real application we would never have HAL be dependent on OS
+#include "os/os_alarm.h"
 void HAL_Ethernet_CreateSelf( struct HAL_Ethernet_Self *self )
 {
     if( self != NULL )
@@ -26,6 +28,14 @@ BOOLEAN Hal_EthernetGetIncomingPacket( struct HAL_Ethernet_Self *self, UINT8 *in
     BOOLEAN toReturn = FALSE;
     if( self != NULL )
     {
+        UINT32 i;
+        DPrintf("Rx [ ");
+        for( i = 0; i<maxLength; i++)
+        {
+            printf("%02X ", self->incomingPacket[i]);
+        }
+        printf("]\r\n");
+
         memcpy( incPacket, self->incomingPacket, maxLength);
         toReturn = TRUE;
     }
@@ -35,7 +45,7 @@ void HAL_Ethernet_OpenUDPPort( struct HAL_Ethernet_Self *self )
 {
     if( self != NULL )
     {
-        printf("Openning Server %s:%u\r\n", self->serverName, self->serverPort);
+        DPrintf("Openning Server %s:%u\r\n", self->serverName, self->serverPort);
         /*
             this driver shall open the port
         */
@@ -48,7 +58,19 @@ void HAL_Ethernet_CloseUDPPort( struct HAL_Ethernet_Self *self )
         /*
             this driver shall close the port
         */
+        printf("closing port\r\n");
     }
+}
+STATIC void HAL_Ethernet_TxCompleted( struct HAL_Ethernet_Self *self )
+{
+    if( self != NULL )
+    {
+        if( self->txCompletedCallback != NULL )
+        {
+            self->txCompletedCallback( self->delegate );
+        }
+    }
+
 }
 void Hal_Ethernet_SendThenReceivePacket( struct HAL_Ethernet_Self *self, UINT8 *outPacket, UINT32 packetSize, void ( *txCompletedCallback )( void *delegate) , void *delegate )
 {
@@ -56,7 +78,7 @@ void Hal_Ethernet_SendThenReceivePacket( struct HAL_Ethernet_Self *self, UINT8 *
     {   
         /*this can be extracted onto a helper function*/
         UINT32 i;
-        printf("Sending [ ");
+        DPrintf("Tx [ ");
         for( i = 0; i<packetSize; i++)
         {
             printf("%02X ", outPacket[i]);
@@ -64,16 +86,18 @@ void Hal_Ethernet_SendThenReceivePacket( struct HAL_Ethernet_Self *self, UINT8 *
         printf("]\r\n");
 
         /*
-        this drive should send the needed packet and read the respones
-        */     
-        memcpy( self->incomingPacket, outPacket, packetSize);
-        /*
-            call the completion callback everytime.
-            this is mocked behavior of the packet being sent and received
+        this driver should send the needed packet and read the respones
         */
-        if( txCompletedCallback != NULL )
-        {
-            txCompletedCallback( delegate );
-        }
+        //simulate a delayed response, by setting an alarm that will call the response function after some time.
+        //this can be used to test the host time out of the calling code. 
+
+
+
+        memcpy( self->incomingPacket, outPacket, packetSize);
+        
+        self->txCompletedCallback = txCompletedCallback;
+        self->delegate = delegate;
+        //this would be replaced by a call to the hardware
+        OS_Alarm_Set( (Event) HAL_Ethernet_TxCompleted, self, OS_ALARM_MILISECONDS_TO_BEATS( 250 ) );
     }
 }

@@ -54,6 +54,7 @@ if os.path.exists('build'):
 os.makedirs('build')
 output_files = []
 #build all available files
+print "Building ..."
 for source_file in source_files:
     output_file = "build/{0}".format(source_file.replace(".c",".o")).replace(".opp",".o")
     output_files.append(output_file)
@@ -61,17 +62,20 @@ for source_file in source_files:
         os.makedirs(os.path.dirname(output_file))
     #print "gcc -I source/platform/testplatform/ -c {0} -o {1}".format(source_file, output_file)
     gcc_command = "gcc"
-    print os.path.splitext( source_file )[1]
+    #print os.path.splitext( source_file )[1]
     if os.path.splitext( source_file )[1] == ".cpp":
         gcc_command = 'g++'
     build_command =  "{gcc_command} -I {includes} -c {source_file} -o {output_file}".format(includes=" -I ".join(INCLUDE_DIRS), gcc_command=gcc_command,source_file=source_file, output_file=output_file)
-    print build_command
+    #print build_command
     os.system(build_command)
 
 #linker command. Join all the output files with spaces in between them, and link them into out program file
 #print output_files
 link_command = "gcc -I {includes} -o build/program {output_files}".format(includes=" -I ".join(INCLUDE_DIRS), output_files=" ".join(output_files))
-print link_command
-os.system( link_command )
 
+print "Linking ..."
+
+#print link_command
+os.system( link_command )
+print "Running ..."
 os.system("./build/program")

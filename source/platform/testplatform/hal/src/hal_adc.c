@@ -11,6 +11,7 @@ void HAL_ADC_CreateSelf( struct HAL_ADC_Self *self )
     if( self != NULL )
     {
         self->adcValue = 4000;
+        self->direction = -1;
     }
 }
 
@@ -19,7 +20,15 @@ BOOLEAN Hal_ADC_ReadADCValue( struct HAL_ADC_Self *self, UINT32 *adcValue )
     BOOLEAN success = FALSE;
     if( self != NULL )
     {
-        self-> adcValue -= 100;
+        if( self->adcValue == 3000 )
+        {
+            self->direction = 1;
+        }
+        if( self->adcValue == 4200 )
+        {
+            self->direction = -1;
+        }
+        self->adcValue += (self->direction * 100);
         //simulating a battery that is discharging 100 mV every time the battery is read
         *adcValue = self->adcValue;
         success = TRUE;

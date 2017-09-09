@@ -102,3 +102,31 @@ BOOLEAN OS_EventQueue_Queue( Event event, void *data )
     }
     return eventAdded;
 }
+
+BOOLEAN OS_EventQueue_Cancel( Event eventToRemove, void *dataToRemove )
+{
+    UINT16 eventCount;
+    BOOLEAN cancelled = FALSE;
+    OS_EventQueue_Require();
+    eventCount = s_eventQueueState.eventCount;
+
+    while ( eventCount > 0 )
+    {
+        void *data = NULL;
+        Event event = OS_EventQueue_DequeueHelper( &data );
+
+        if ( event != eventToRemove || ( data != NULL && data != dataToRemove ) )
+        {
+            OS_EventQueue_QueueHelper( event, data );
+        }
+        else
+        {
+            cancelled = TRUE;
+        }
+
+        eventCount--;
+    }
+
+//renable events
+    return ( cancelled );
+}
