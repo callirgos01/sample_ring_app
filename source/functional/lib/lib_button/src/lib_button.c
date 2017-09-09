@@ -3,6 +3,7 @@ This file takes care of the business logic associated with the button.
 like what to do when the button is pressed.
 And how to propate that event
 */
+#include <stdio.h>
 #include "typedefs.h"
 #include "../../functional/hal/hal_gpio.h"
 #include "lib_button_p.h"

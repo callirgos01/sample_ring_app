@@ -6,7 +6,8 @@
 #include "../lib_battery.h"
 #include "../../lib_charger/lib_charger.h"
 #include "../../functional/hal/hal_adc.h"
-
+#define LIB_BATTERY_READ_INTERVAL_SECONDS ( 60 )
+#define LIB_BATTERY_READ_INTERVAL ( OS_ALARM_SECONDS_TO_BEATS(LIB_BATTERY_READ_INTERVAL_SECONDS))
 struct Lib_Battery_Self
 {
     UINT32 lowBatteryThreshold;

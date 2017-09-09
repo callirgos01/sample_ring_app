@@ -3,7 +3,8 @@
 #include "typedefs.h"
 #include "lib_led_p.h"
 #include "../../functional/hal/hal_gpio.h"
-
+#include "os/os_eventqueue.h"
+#include "os/os_alarm.h"
 
 void Lib_LED_CreateSelf( Lib_LED_Self *self, HAL_GPIO_Self *gpioLED )
 {
@@ -24,7 +25,6 @@ void Lib_LED_TurnLEDOn( Lib_LED_Self *self )
     if ( self != NULL )
     {
         self->ledState = TRUE;//we can alternitevly get the state through the readgpio pin function
-        printf("LED_ON\r\n");
         HAL_GPIO_SetLine( self->gpioLED, self->activeHigh );
     }
 
@@ -36,7 +36,6 @@ void Lib_LED_TurnLEDOff( Lib_LED_Self *self )
     if ( self != NULL )
     {
         self->ledState = FALSE;//we can alternitevly get the state through the readgpio pin function
-        printf("LED_OFF\r\n");
         HAL_GPIO_SetLine( self->gpioLED, !self->activeHigh );
     }
 }
@@ -52,6 +51,7 @@ STATIC void Lib_LED_StartPatternProcess( Lib_LED_Self *self )
             Lib_LED_TurnLEDOff( self );
             //set an alarm to fire (off time miliseconds later)
             //alarm_set( Lib_LED_StartPatternProcess, self, self->miliSecondsOffTime );
+            OS_Alarm_Set( (Event)Lib_LED_StartPatternProcess, self, OS_ALARM_MILISECONDS_TO_BEATS( self->miliSecondsOffTime ) );
         }
         else
         {
@@ -59,7 +59,7 @@ STATIC void Lib_LED_StartPatternProcess( Lib_LED_Self *self )
             Lib_LED_TurnLEDOn( self );
             //set an alarm to fire (on time miliseconds later)
             //alarm_set( Lib_LED_StartPatternProcess, self, self->miliSecondsOnTime );
-
+            OS_Alarm_Set( (Event)Lib_LED_StartPatternProcess, self, OS_ALARM_MILISECONDS_TO_BEATS( self->miliSecondsOnTime ) );
         }
     }
 }
@@ -73,7 +73,9 @@ void Lib_LED_StartPattern( Lib_LED_Self *self, UINT32 miliSecondsOnTime, UINT32 
     {
         self->miliSecondsOffTime = miliSecondsOffTime;
         self->miliSecondsOnTime = miliSecondsOnTime;
-        //QUEUE UP THE PATTERN EVENT TO TRIGGER SYNCHRONOUSLY ( Lib_LED_StartPatternProcess, self, 0 );
+        OS_Alarm_Cancel( (Event)Lib_LED_StartPatternProcess, self );
+        //QUEUE UP THE PATTERN EVENT TO TRIGGER SYNCHRONOUSLY ( Lib_LED_StartPatternProcess, self);
+        OS_EventQueue_Queue( (Event) Lib_LED_StartPatternProcess, self);
     }
 }
 
@@ -83,6 +85,7 @@ void Lib_LED_StopPattern( Lib_LED_Self *self )
     {
         /*cancels the alarms (if any) from firing*/    
         //ALARM_CANCEL 
+        OS_Alarm_Cancel( (Event)Lib_LED_StartPatternProcess, self );
         //alarm_cancel( Lib_LED_StartPatternProcess );    
         /*and turns off the LED if its on */
         Lib_LED_TurnLEDOff( self );
