@@ -56,6 +56,5 @@ struct HAL_GPIO_Self
     BOOLEAN lineState;
 };
 
-void HAL_GPIO_CreateSelf( struct HAL_GPIO_Self *self, HAL_GPIO_Line *line );
 
 #endif //HAL_GPIO_P_H

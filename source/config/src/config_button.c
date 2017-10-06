@@ -7,7 +7,7 @@
 #include "typedefs.h"
 #include "lib_button/src/lib_button_config.h"
 #include "hal/hal_gpio.h"
-#include "hal/src/hal_gpio_p.h"
+#include "hal/src/hal_gpio_config.h"
 
 STATIC BOOLEAN s_configButtonLoaded = FALSE;
 

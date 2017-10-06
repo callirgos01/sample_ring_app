@@ -9,7 +9,8 @@
 #define DPrintf(...) printf("[time]" ) ;    \
                      printf( __VA_ARGS__)
 
-
+#define WEAK __attribute__((weak))
+                     
 typedef volatile void ( *InterruptEvent )( void *data );
 
 typedef signed int      SINT32;  // 32 bits

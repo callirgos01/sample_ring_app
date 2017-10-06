@@ -5,8 +5,8 @@
 #include "typedefs.h"
 
 #include "lib_battery/src/lib_battery_config.h"
-#include "../../functional/hal/hal_adc.h"
-#include "hal/src/hal_adc_p.h"
+#include "hal/hal_adc.h"
+#include "hal/src/hal_adc_config.h"
 #include "config_charger_p.h"
 
 #define LOW_BATTERY_THRESHOLD 3500

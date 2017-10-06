@@ -5,7 +5,7 @@ And how to propate that event
 */
 #include <stdio.h>
 #include "typedefs.h"
-#include "../../functional/hal/hal_gpio.h"
+#include "hal/hal_gpio.h"
 #include "lib_button_p.h"
 
 STATIC void Lib_Button_ProcessInterrupt ( Lib_Button_Self *self )

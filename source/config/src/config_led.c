@@ -5,7 +5,7 @@
 
 #include "lib_led/src/lib_led_config.h"
 #include "hal/hal_gpio.h"
-#include "hal/src/hal_gpio_p.h"
+#include "hal/src/hal_gpio_config.h"
 
 STATIC BOOLEAN s_ledLoaded = FALSE;
 //setup the gpio pins for this hypothetical platform

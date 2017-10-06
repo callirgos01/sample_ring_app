@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include "typedefs.h"
-#include "../../functional/hal/hal_ethernet.h"
+#include "hal/hal_ethernet.h"
 #include "lib_ethernet_p.h"
 #include "os/os_alarm.h"
 STATIC void Lib_Ethernet_SendPacket( Lib_Ethernet_Self *self );

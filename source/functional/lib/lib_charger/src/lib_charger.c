@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include "typedefs.h"
-#include "../../functional/hal/hal_gpio.h"
+#include "hal/hal_gpio.h"
 #include "lib_charger_p.h"
 #include "os/os_eventqueue.h"
 #include "os/os_alarm.h"
