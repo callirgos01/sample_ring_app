@@ -14,5 +14,4 @@ struct Lib_Charger_Self
     Lib_Charger_ChargerDisconnectedEvent chargerDisconnected;
 };
 
-void Lib_Charger_CreateSelf( Lib_Charger_Self *self, HAL_GPIO_Self *chargerConnectedInterrupt );
 #endif // __LIB_CHARGER_P_H__

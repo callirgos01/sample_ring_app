@@ -7,6 +7,7 @@ import os
 import string
 import shutil 
 
+BUILD_FOLDER = 'build_local'
 EXCLUDE_SOURCE_FILES = [ ]
 EXCLUDE_LIBS = [ ] 
 SOURCE_DIRS = [
@@ -20,6 +21,7 @@ SOURCE_DIRS = [
 INCLUDE_DIRS = [
     'source/config',
     'source/functional',
+    'source/functional/lib',
     'source/platform/testplatform/soup',
     'source/platform/testplatform/soup/boost',
     'source/platform/testplatform',
@@ -47,16 +49,16 @@ for dir in SOURCE_DIRS:
 source_files = [f for f in source_files if f not in EXCLUDE_SOURCE_FILES and "/test_" not in f]
 
 #clean up previous build
-if os.path.exists('build'):
-    shutil.rmtree('build') 
+if os.path.exists(BUILD_FOLDER):
+    shutil.rmtree(BUILD_FOLDER) 
 
 #create build folder
-os.makedirs('build')
+os.makedirs(BUILD_FOLDER)
 output_files = []
 #build all available files
 print "Building ..."
 for source_file in source_files:
-    output_file = "build/{0}".format(source_file.replace(".c",".o")).replace(".opp",".o")
+    output_file = "{build_folder}/{0}".format(source_file.replace(".c",".o"),build_folder=BUILD_FOLDER).replace(".opp",".o")
     output_files.append(output_file)
     if not os.path.exists(os.path.dirname(output_file)):
         os.makedirs(os.path.dirname(output_file))
@@ -71,11 +73,11 @@ for source_file in source_files:
 
 #linker command. Join all the output files with spaces in between them, and link them into out program file
 #print output_files
-link_command = "gcc -I {includes} -o build/program {output_files}".format(includes=" -I ".join(INCLUDE_DIRS), output_files=" ".join(output_files))
+link_command = "gcc -I {includes} -o {build_folder}/program {output_files}".format(build_folder=BUILD_FOLDER,includes=" -I ".join(INCLUDE_DIRS), output_files=" ".join(output_files))
 
 print "Linking ..."
 
 #print link_command
 os.system( link_command )
 print "Running ..."
-os.system("./build/program")
+os.system("./{build_folder}/program".format(build_folder=BUILD_FOLDER))

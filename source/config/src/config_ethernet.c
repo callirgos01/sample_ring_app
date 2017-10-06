@@ -3,8 +3,8 @@
 */
 #include "typedefs.h"
 
-#include "../../functional/lib/lib_ethernet/src/lib_ethernet_p.h"
-#include "../../functional/hal/hal_ethernet.h"
+#include "lib_ethernet/src/lib_ethernet_config.h"
+#include "hal/hal_ethernet.h"
 #include "hal/src/hal_ethernet_p.h"
 
 #define TEST_SERVER_NAME_LENGTH 14

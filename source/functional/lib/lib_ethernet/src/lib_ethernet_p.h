@@ -3,8 +3,8 @@
 #define __LIB_ETHERNET_P_H__
 
 #include "typedefs.h"
-#include "../lib_ethernet.h"
-#include "../../functional/hal/hal_ethernet.h"
+#include "lib_ethernet/lib_ethernet.h"
+#include "hal/hal_ethernet.h"
 
 
 #define PACKET_SIZE 2
@@ -16,7 +16,5 @@ struct Lib_Ethernet_Self
     UINT32 time;
     BOOLEAN running;
 };
-
-void Lib_Ethernet_CreateSelf( Lib_Ethernet_Self *self, HAL_Ethernet_Self *halEthernet );
 
 #endif // __LIB_ETHERNET_P_H__

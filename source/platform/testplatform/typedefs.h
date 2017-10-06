@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 //@todo remove this print f, and create a utility file with this functionality.
-#define DPrintf(...) printf("[%u]", OS_ALARM_BEATS_TO_MILISECONDS( HAL_Time_GetBeatsSinceStartup() ) ) ;    \
+#define DPrintf(...) printf("[time]" ) ;    \
                      printf( __VA_ARGS__)
 
 

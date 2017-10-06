@@ -4,7 +4,7 @@
 */
 #include "typedefs.h"
 
-#include "../../functional/lib/lib_battery/src/lib_battery_p.h"
+#include "lib_battery/src/lib_battery_config.h"
 #include "../../functional/hal/hal_adc.h"
 #include "hal/src/hal_adc_p.h"
 #include "config_charger_p.h"

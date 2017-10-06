@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include "typedefs.h"
 #include "hal_gpio_p.h"
-#include "os/os_alarm.h"
 
 void HAL_GPIO_CreateSelf( struct HAL_GPIO_Self *self, HAL_GPIO_Line *line )
 {
@@ -48,9 +47,9 @@ void HAL_GPIO_SetLineInterruptTrigger( struct HAL_GPIO_Self *self, InterruptEven
     //this should setup the gpio pins to trigger an interrupt and call the callback 'interruptEvent' when the gpio triggers on the specified edge
     //lets simulate some events from this stubbed driver
     //setup an alarm to trigger a a constant interval.
-    UINT32 beatsToWait = OS_ALARM_SECONDS_TO_BEATS( s_test_times[s_timesIndex++] );
+    //UINT32 beatsToWait = OS_ALARM_SECONDS_TO_BEATS( s_test_times[s_timesIndex++] );
 
-    OS_Alarm_Repeat( (Event) interruptEvent, interruptData, beatsToWait, beatsToWait, OS_ALARM_REPEAT_FOREVER );
+    //OS_Alarm_Repeat( (Event) interruptEvent, interruptData, beatsToWait, beatsToWait, OS_ALARM_REPEAT_FOREVER );
 
 }
 
