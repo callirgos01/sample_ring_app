@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include "lib_battery_p.h"
 #include "os/os_alarm.h"
-#include "hal/hal_adc.h"
-#include "lib_charger/lib_charger.h"
+#include "../../functional/hal/hal_adc.h"
+#include "../../lib_charger/lib_charger.h"
 STATIC void Lib_Battery_CheckBattery( Lib_Battery_Self *self );
 
 

@@ -3,8 +3,8 @@
 #define __LIB_LED_P_H__
 
 #include "typedefs.h"
-#include "lib_led/lib_led.h"
-#include "hal/hal_gpio.h"
+#include "../lib_led.h"
+#include "../../functional/hal/hal_gpio.h"
 
 struct Lib_LED_Self
 {

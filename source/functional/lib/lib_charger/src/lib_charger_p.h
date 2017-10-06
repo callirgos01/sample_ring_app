@@ -3,8 +3,8 @@
 #define __LIB_CHARGER_P_H__
 
 #include "typedefs.h"
-#include "lib_charger/lib_charger.h"
-#include "hal/hal_gpio.h"
+#include "../lib_charger.h"
+#include "../../functional/hal/hal_gpio.h"
 
 struct Lib_Charger_Self
 {    

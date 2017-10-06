@@ -5,7 +5,7 @@
 
 #include "lib_ethernet/src/lib_ethernet_config.h"
 #include "hal/hal_ethernet.h"
-#include "hal/src/hal_ethernet_config.h"
+#include "hal/src/hal_ethernet_p.h"
 
 #define TEST_SERVER_NAME_LENGTH 14
 #define TEST_SERVER "test.ring.com"

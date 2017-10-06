@@ -15,5 +15,6 @@ struct HAL_Ethernet_Self
     void *delegate;
 };
 
+void HAL_Ethernet_CreateSelf( struct HAL_Ethernet_Self *self );
 
 #endif //HAL_ETHERNET_P_H
