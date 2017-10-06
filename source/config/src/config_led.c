@@ -3,8 +3,8 @@
     GPIO pin setup is encapsulated here
 */
 
-#include "lib_led/src/lib_led_config.h"
-#include "hal/hal_gpio.h"
+#include "../../functional/lib/lib_led/src/lib_led_p.h"
+#include "../../functional/hal/hal_gpio.h"
 #include "hal/src/hal_gpio_p.h"
 
 STATIC BOOLEAN s_ledLoaded = FALSE;

@@ -4,7 +4,7 @@ this file will setup all the handles for all the components in the system and li
 it uses lazy initializations to get all the information needed to build the project
 */
 #include "typedefs.h"
-#include "lib_ringapp/src/lib_ringapp_config.h"
+#include "../../functional/lib/lib_ringapp/src/lib_ringapp_p.h"
 
 #include "config_button_p.h"
 #include "config_ethernet_p.h"

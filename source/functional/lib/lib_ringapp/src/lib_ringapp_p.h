@@ -22,5 +22,6 @@ struct Lib_RingApp_Self
     BOOLEAN lowBattery;
 };
 
+void Lib_RingApp_CreateSelf( Lib_RingApp_Self *self, Lib_Button_Self *button, Lib_Ethernet_Self *ethernet, Lib_LED_Self *redLED, Lib_LED_Self *whiteLED, Lib_Battery_Self *battery );
 
 #endif //LIB_RINGAPP_P_H

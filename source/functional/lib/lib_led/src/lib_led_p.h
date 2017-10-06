@@ -15,5 +15,6 @@ struct Lib_LED_Self
     BOOLEAN ledState;
 };
 
+void Lib_LED_CreateSelf( Lib_LED_Self *self, HAL_GPIO_Self *gpioLED );
 
 #endif // __LIB_LED_P_H__

@@ -13,7 +13,7 @@ STATIC void Lib_Ethernet_SendPacket( Lib_Ethernet_Self *self );
     b.) For every 2-byte UDP packet sent to the server, the server shall return back a 2-byte packet on the same port echoing the counter. If no echo is received within 500ms or the value returned from the server is not equal to the value sent from the device, the device shall re-send the current value. This shall continue until the correct value is received from the server, at which point the device will increment the counter and proceed as normal.
     c.) When the button is released, the socket shall be closed and the counter shall be reset.
 */
-void Lib_Ethernet_CreateSelf( Lib_Ethernet_Self *self, HAL_Ethernet_Self *halEthernet )
+void Lib_Ethernet_CreateSelf( struct Lib_Ethernet_Self *self, HAL_Ethernet_Self *halEthernet )
 {
     if ( self != NULL )
     {        
@@ -51,6 +51,8 @@ STATIC void Lib_Ethernet_SendProcessCompletedCallback( Lib_Ethernet_Self *self )
         //and there is a reply from the server
         if( Hal_EthernetGetIncomingPacket( self->halEthernet, incPacket, PACKET_SIZE ) )
         {
+            UINT32 i;
+
             UINT16 incValue = (UINT16)( (UINT16)(incPacket[0]) | ((UINT16)(incPacket[1]) << 8) );
             if( self->count == incValue )
             {

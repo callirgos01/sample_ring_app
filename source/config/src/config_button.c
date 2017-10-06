@@ -5,8 +5,8 @@
     initializing the self entity for the button
 */
 #include "typedefs.h"
-#include "lib_button/src/lib_button_config.h"
-#include "hal/hal_gpio.h"
+#include "../../functional/lib/lib_button/src/lib_button_p.h"
+#include "../../functional/hal/hal_gpio.h"
 #include "hal/src/hal_gpio_p.h"
 
 STATIC BOOLEAN s_configButtonLoaded = FALSE;

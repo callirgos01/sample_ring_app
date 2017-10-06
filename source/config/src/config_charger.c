@@ -5,7 +5,7 @@
     initializing the self entity for the charger
 */
 #include "typedefs.h"
-#include "lib_charger/src/lib_charger_config.h"
+#include "../../functional/lib/lib_charger/src/lib_charger_p.h"
 #include "../../functional/hal/hal_gpio.h"
 #include "hal/src/hal_gpio_p.h"
 

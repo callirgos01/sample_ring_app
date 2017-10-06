@@ -15,4 +15,7 @@ struct Lib_Button_Self
     Lib_Button_ButtonReleasedEvent buttonReleasedCallback;
 };
 
+void Lib_Button_CreateSelf( Lib_Button_Self *self, HAL_GPIO_Self* gpioPin );
+
+
 #endif //LIB_BUTTON_P_H
